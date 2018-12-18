@@ -19,7 +19,7 @@ unsigned char *guessedWord;
 
 unsigned char letter;
 
-string header = "\t\t\t\t\tИгра \"Виселица\"\n\n";
+char header[] = "\t\t\t\t\tИгра \"Виселица\"\n\n";
 
 /*
 Игра "Виселица"
@@ -40,7 +40,7 @@ int gallows()
 	{
 		gameLevel = gameStart();
 	} while (gameLevel != '0' && gameLevel != '1');
-	
+
 	//Выбор уровня сожности
 	if (gameLevel == '0')
 	{
@@ -50,7 +50,7 @@ int gallows()
 	{
 		steps = (level)hard;
 	}
-	
+
 	//Ввод слова
 	do
 	{
@@ -58,10 +58,10 @@ int gallows()
 		printf("%s", header);
 		if (wordSize > 0) {
 			//Вывод подсказки
-			string hint = "\t\tСлово должно содержать только заглавные и прописные русские буквы!\n\n";
+			char hint[] = "\t\tСлово должно содержать только заглавные и прописные русские буквы!\n\n";
 			printf("%s", hint);
 		}
-		string wordEnter = "\t\t\tВаше слово:  ";
+		char wordEnter[] = "\t\t\tВаше слово:  ";
 		printf("%s", wordEnter);
 		getWord();
 		initGuessedWord(word[0], word[wordSize - 1]);
@@ -101,7 +101,7 @@ int gallows()
 	{
 		printf("\t\t\t\t\tВы проиграли!\n");
 	}
-	system("pause");
+	//system("pause");
 	return gameStatus;
 }
 
@@ -111,7 +111,7 @@ int gallows()
 char gameStart()
 {
 	//system("@cls||clear");
-	string startGame = "\t\t\t\tВыберите уровень сложности:\n\t\t\t0 - легко(9 попыток)\t1 - сложно(7 попыток)\n\t\t\tВаш выбор:  ";
+	char startGame[] = "\t\t\t\tВыберите уровень сложности:\n\t\t\t0 - легко(9 попыток)\t1 - сложно(7 попыток)\n\t\t\tВаш выбор:  ";
 	printf("%s%s", header, startGame);
 	return getchar();
 }
@@ -314,7 +314,7 @@ void changeGuessedWord()
 /*
 Считывание слова
 */
-void getWord() 
+void getWord()
 {
 	int tries = 0;
 	wordSize = 0;
@@ -329,7 +329,6 @@ void getWord()
 
 		word = (unsigned char *)malloc(sizeof(unsigned char));
 
-		//todo Возможно изменить для визуальной оболочки
 		while ((wordLetter = getchar()) != '\n') {
 			size++;
 			word = (unsigned char *)realloc(word, sizeof(unsigned char) * size);
@@ -350,7 +349,7 @@ void getWord()
 */
 void getLetter()
 {
-	if (letter = getchar() == '\n')
+	if ((letter = getchar()) == '\n')
 	{
 		letter = getchar();
 	}
