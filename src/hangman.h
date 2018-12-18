@@ -4,6 +4,9 @@
 #include <string.h>
 #include <malloc.h>
 #include <iostream>
+#include <locale.h>
+
+#define clear() printf("\033[H\033[J")
 
 int gallows();
 int checkWin();

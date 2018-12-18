@@ -50,24 +50,27 @@ int gallows()
 	{
 		steps = (level)hard;
 	}
-
+	fflush(stdin);
 	//Ввод слова
 	do
 	{
-		//system("@cls||clear");
+		clear();
 		printf("%s", header);
 		if (wordSize > 0) {
-			//Вывод подсказки
+				//Вывод подсказки
 			char hint[] = "\t\tСлово должно содержать только заглавные и прописные русские буквы!\n\n";
 			printf("%s", hint);
 		}
 		char wordEnter[] = "\t\t\tВаше слово:  ";
 		printf("%s", wordEnter);
+		fflush(stdin);
+		getchar();
 		getWord();
 		initGuessedWord(word[0], word[wordSize - 1]);
-		checkWord();
+		setGameStatus(1);
+		//checkWord();
 	} while (checkWin() != 1);
-	//system("@cls||clear");
+	clear();
 	printGuessedWord();
 
 
@@ -75,11 +78,11 @@ int gallows()
 	while (checkWin() == 1)
 	{
 		letter = '\0';
-		while (checkLetter() == 0)
-		{
+		//while (checkLetter() == 0)
+		//{
 			printf("\t\t\t\tВведите букву: ");
 			getLetter();
-		}
+		//}
 		if (compareWordAndLetter() == 1) {
 			changeGuessedWord();
 			//printf("Буква угаданна, осталось шагов: %d\n", steps);
@@ -88,10 +91,10 @@ int gallows()
 			steps--;
 			//printf("Буква не угаданна, осталось шагов: %d\n", steps);
 		}
-		//system("@cls||clear");
+		clear();
 		printGuessedWord();
 	}
-	//system("@cls||clear");
+	clear();
 	printf("%s", header);
 	if (gameStatus == 2)
 	{
@@ -101,7 +104,7 @@ int gallows()
 	{
 		printf("\t\t\t\t\tВы проиграли!\n");
 	}
-	//system("pause");
+	getchar();
 	return gameStatus;
 }
 
@@ -110,7 +113,7 @@ int gallows()
 */
 char gameStart()
 {
-	//system("@cls||clear");
+	clear();
 	char startGame[] = "\t\t\t\tВыберите уровень сложности:\n\t\t\t0 - легко(9 попыток)\t1 - сложно(7 попыток)\n\t\t\tВаш выбор:  ";
 	printf("%s%s", header, startGame);
 	return getchar();
@@ -181,7 +184,7 @@ void setGameStatus(int status)
 Проверка введенного изначального слова
 1) Проверяет статус игры
 2) Проверяет корректность введеннного слова
-Статусы: 
+Статусы:
  - -1 -> Общая ошибка(например, конфликт статуса игры) -> выход из игры
  - 1 -> Корректно введено слово -> изменение статуса игры на "Игра"
  - 0 -> Некорректно введенное слово -> статус игры остается "Началом игры" -> объяснение правил -> повторный запрос слова
@@ -201,7 +204,7 @@ int checkWord()
 				compareSize++;
 			}
 		}
-		if (compareSize == wordSize) {
+		if ((compareSize * 2) == wordSize) {
 			setGameStatus(1);
 			return 1;
 		}
@@ -316,32 +319,17 @@ void changeGuessedWord()
 */
 void getWord()
 {
-	int tries = 0;
 	wordSize = 0;
-	while (wordSize == 0)
-	{
-		if (tries > 1)
-		{
-			getchar();
-		}
-		int size = 0;
-		unsigned char wordLetter;
-
-		word = (unsigned char *)malloc(sizeof(unsigned char));
-
-		while ((wordLetter = getchar()) != '\n') {
-			size++;
-			word = (unsigned char *)realloc(word, sizeof(unsigned char) * size);
-			word[size - 1] = wordLetter;
-		}
-		size++;
-		word = (unsigned char *)realloc(word, sizeof(unsigned char) * size);
-		word[size - 1] = '\0';
-		wordSize = size - 1;
-
-		tries++;
-
+	unsigned char wordLetter;
+	word = (unsigned char *)malloc(sizeof(unsigned char));
+	fflush(stdin);
+	while ((wordLetter = getchar()) != '\n') {
+		wordSize++;
+		word = (unsigned char *)realloc(word, sizeof(unsigned char) * wordSize);
+		word[wordSize - 1] = wordLetter;
 	}
+	word = (unsigned char *)realloc(word, sizeof(unsigned char) * (wordSize + 1));
+	word[wordSize] = '\0';
 }
 
 /*
@@ -349,7 +337,9 @@ void getWord()
 */
 void getLetter()
 {
-	if ((letter = getchar()) == '\n')
+	fflush(stdin);
+	letter = getchar();
+	if (letter == '\n')
 	{
 		letter = getchar();
 	}
@@ -361,48 +351,43 @@ void getLetter()
 */
 void printGuessedWord()
 {
-	printf("%s\t\t\t\t\t\n", header);
+	printf("\n%s\t\t\t\t\n", header);
 	int stage = (level)easy - steps;
 	if (stage == 0)
 	{
-		std::wcout << L"";
+		printf("\n\n\n\n\n\n\n\t\t\t═╩═");
 	}
 	else if (stage == 1)
 	{
-		std::wcout << L"\t\t\t ╔---╗\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═";
+		printf("\t\t\t\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═");
 	}
 	else if (stage == 2)
 	{
-		std::wcout << L"\t\t\t ╔---╗\n\t\t\t ║   ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═";
+		printf("\t\t\t ═════\n\t\t\t ║   ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═");
 	}
 	else if (stage == 3)
 	{
-		std::wcout << L"\t\t\t ╔---╗\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═";
+		printf("\t\t\t ═════\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═");
 	}
 	else if (stage == 4)
 	{
-		std::wcout << L"\t\t\t ╔---╗\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║   |\n\t\t\t ║   |\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═";
+		printf("\t\t\t ═════\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║   ║\n\t\t\t ║   ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═");
 	}
 	else if (stage == 5)
 	{
-		std::wcout << L"\t\t\t ╔---╗\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║   |\\\n\t\t\t ║   |\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═";
+		printf("\t\t\t ═════\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║   ║\\\n\t\t\t ║   ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═");
 	}
 	else if (stage == 6)
 	{
-		std::wcout << L"\t\t\t ╔---╗\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║  /|\\\n\t\t\t ║   |\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═";
+		printf("\t\t\t ═════\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║  /║\\\n\t\t\t ║   ║\n\t\t\t ║\n\t\t\t ║\n\t\t\t═╩═");
 	}
 	else if (stage == 7)
 	{
-		std::wcout << L"\t\t\t ╔---╗\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║  /|\\\n\t\t\t ║   |\n\t\t\t ║    \\\n\t\t\t ║\n\t\t\t═╩═";
+		printf("\t\t\t ═════\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║  /║\\\n\t\t\t ║   ║\n\t\t\t ║    \\\n\t\t\t ║\n\t\t\t═╩═");
 	}
 	else if (stage == 8)
 	{
-		std::wcout << L"\t\t\t ╔---╗\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║  /|\\\n\t\t\t ║   |\n\t\t\t ║  / \\\n\t\t\t ║\n\t\t\t═╩═";
+		printf("\t\t\t ═════\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║  /║\\\n\t\t\t ║   ║\n\t\t\t ║  / \\\n\t\t\t ║\n\t\t\t═╩═");
 	}
-	printf("\n\n\t\t\t");
-	for (int i = 0; i < wordSize; i++)
-	{
-		printf("%c ", guessedWord[i]);
-	}
-	printf("\n");
+	printf("\n\n\t\t\t\t%s\n", guessedWord);
 }
