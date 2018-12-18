@@ -1,4 +1,4 @@
-#include "header.h"
+#include "hangman.h"
 
 //Сложность игры
 typedef enum gameLevels
@@ -19,7 +19,7 @@ unsigned char *guessedWord;
 
 unsigned char letter;
 
-char *header = "\t\t\t\t\tИгра \"Виселица\"\n\n";
+string header = "\t\t\t\t\tИгра \"Виселица\"\n\n";
 
 /*
 Игра "Виселица"
@@ -54,20 +54,20 @@ int gallows()
 	//Ввод слова
 	do
 	{
-		system("@cls||clear");
+		//system("@cls||clear");
 		printf("%s", header);
 		if (wordSize > 0) {
 			//Вывод подсказки
-			char *hint = "\t\tСлово должно содержать только заглавные и прописные русские буквы!\n\n";
+			string hint = "\t\tСлово должно содержать только заглавные и прописные русские буквы!\n\n";
 			printf("%s", hint);
 		}
-		char *wordEnter = "\t\t\tВаше слово:  ";
+		string wordEnter = "\t\t\tВаше слово:  ";
 		printf("%s", wordEnter);
 		getWord();
 		initGuessedWord(word[0], word[wordSize - 1]);
 		checkWord();
 	} while (checkWin() != 1);
-	system("@cls||clear");
+	//system("@cls||clear");
 	printGuessedWord();
 
 
@@ -88,10 +88,10 @@ int gallows()
 			steps--;
 			//printf("Буква не угаданна, осталось шагов: %d\n", steps);
 		}
-		system("@cls||clear");
+		//system("@cls||clear");
 		printGuessedWord();
 	}
-	system("@cls||clear");
+	//system("@cls||clear");
 	printf("%s", header);
 	if (gameStatus == 2)
 	{
@@ -110,8 +110,8 @@ int gallows()
 */
 char gameStart()
 {
-	system("@cls||clear");
-	char *startGame = "\t\t\t\tВыберите уровень сложности:\n\t\t\t0 - легко(9 попыток)\t1 - сложно(7 попыток)\n\t\t\tВаш выбор:  ";
+	//system("@cls||clear");
+	string startGame = "\t\t\t\tВыберите уровень сложности:\n\t\t\t0 - легко(9 попыток)\t1 - сложно(7 попыток)\n\t\t\tВаш выбор:  ";
 	printf("%s%s", header, startGame);
 	return getchar();
 }

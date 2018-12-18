@@ -4,8 +4,6 @@
 #include <string.h>
 #include <malloc.h>
 #include <iostream>
-#include <windows.h>
-#include <iostream>
 
 int gallows();
 int checkWin();
