@@ -7,7 +7,7 @@ DIRECTORY = build/src
 BUILDDIR = build
 
 all: $(DIRECTORY)/main.o $(DIRECTORY)/hangman.o
-	$(CC) $(DIRECTORY)/main.cpp $(DIRECTORY)/hangman.o -o $(EXECUTABLE)
+	$(CC) $(DIRECTORY)/main.o $(DIRECTORY)/hangman.o -o $(EXECUTABLE)
 
 $(DIRECTORY)/main.o: src/main.cpp
 	mkdir -p build
