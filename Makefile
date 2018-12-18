@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -Wall -Werror
 
-EXECUTABLE = bin/deposit
+EXECUTABLE = bin/hangman
 
 DIRECTORY = build/src
 BUILDDIR = build

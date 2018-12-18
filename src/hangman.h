@@ -16,7 +16,7 @@ int compareWordAndLetter();
 int checkLetter();
 char gameStart();
 
-void initGuessedWord(char, char);
+void initGuessedWord();
 void changeGuessedWord();
 void setGameStatus(int );
 void getWord();

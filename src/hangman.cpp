@@ -33,7 +33,6 @@ char header[] = "\t\t\t\t\tИгра \"Виселица\"\n\n";
 int gallows()
 {
 	setGameStatus(0);
-
 	//Старт игры
 	char gameLevel;
 	do
@@ -63,26 +62,21 @@ int gallows()
 		}
 		char wordEnter[] = "\t\t\tВаше слово:  ";
 		printf("%s", wordEnter);
-		fflush(stdin);
-		getchar();
 		getWord();
-		initGuessedWord(word[0], word[wordSize - 1]);
-		setGameStatus(1);
-		//checkWord();
-	} while (checkWin() != 1);
+		checkWord();
+	} while (gameStatus != 1);
+	initGuessedWord();
 	clear();
 	printGuessedWord();
-
-
 	//Угладывание букв
 	while (checkWin() == 1)
 	{
 		letter = '\0';
-		//while (checkLetter() == 0)
-		//{
+		while (checkLetter() == 0)
+		{
 			printf("\t\t\t\tВведите букву: ");
 			getLetter();
-		//}
+		}
 		if (compareWordAndLetter() == 1) {
 			changeGuessedWord();
 			//printf("Буква угаданна, осталось шагов: %d\n", steps);
@@ -196,15 +190,11 @@ int checkWord()
 		for (int i = 0; i < wordSize; i++)
 		{
 			unsigned char compareLetter = word[i];
-			/*
-			Заглавные русские -> [0xC0; 0xE0)
-			Прописные русские -> [0xE0; 0xFF]
-			*/
-			if ((compareLetter > 0xC0 && compareLetter <= 0xFF)) {
+			if (((int)compareLetter > 126 && (int)compareLetter <= 255)) {
 				compareSize++;
 			}
 		}
-		if ((compareSize * 2) == wordSize) {
+		if (compareSize == wordSize) {
 			setGameStatus(1);
 			return 1;
 		}
@@ -224,7 +214,7 @@ int checkWord()
 1) Проверяет статус игры
 2) Проверяет совпадения буквы
 Статусы
-- -1 -> Общая ошибка(например, конфликт статуса игры) -> выход из 
+- -1 -> Общая ошибка(например, конфликт статуса игры) -> выход из
 - 1 -> Буква совпала
 - 0 -> Буква не совпала
 */
@@ -263,7 +253,7 @@ int checkLetter()
 		Заглавные русские -> [0xC0; 0xE0)
 		Прописные русские -> [0xE0; 0xFF]
 		*/
-		if ((compareLetter > 0xC0 && compareLetter <= 0xFF)) {
+		if ((compareLetter > 126 && compareLetter <= 255)) {
 			return 1;
 		}
 		else {
@@ -278,15 +268,19 @@ int checkLetter()
 /*
 Инициализация угаданного слова
 */
-void initGuessedWord(char first, char last)
+void initGuessedWord()
 {
 	guessedWord = (unsigned char *)malloc(sizeof(unsigned char) * (wordSize + 1));
 	for (int i = 0; i < wordSize; i++)
 	{
-		guessedWord[i] = '_';
+		if (((i == 0) || (i == 1) || (i == wordSize - 2) || (i == wordSize - 1)))
+		{
+			guessedWord[i] = word[i];
+		}
+		else {
+			guessedWord[i] = '_';
+		}
 	}
-	guessedWord[0] = first;
-	guessedWord[wordSize - 1] = last;
 	guessedWord[wordSize] = '\0';
 }
 
@@ -319,17 +313,27 @@ void changeGuessedWord()
 */
 void getWord()
 {
-	wordSize = 0;
-	unsigned char wordLetter;
-	word = (unsigned char *)malloc(sizeof(unsigned char));
-	fflush(stdin);
-	while ((wordLetter = getchar()) != '\n') {
-		wordSize++;
-		word = (unsigned char *)realloc(word, sizeof(unsigned char) * wordSize);
-		word[wordSize - 1] = wordLetter;
+	char buff[64];
+	if (fgets(buff, sizeof buff, stdin)){
+		if (buff[0] == '\n')
+		{
+			getWord();
+		}
+		else {
+			int i = 0;
+			while (buff[i] != '\0')
+			{
+				i++;
+			}
+			wordSize = (i - 1);
+			word = (unsigned char *)malloc(sizeof(unsigned char) * (wordSize + 1));
+			for (int i = 0; i < wordSize; i++)
+			{
+				word[i] = (unsigned char)buff[i];
+			}
+			word[wordSize] = '\0';
+		}
 	}
-	word = (unsigned char *)realloc(word, sizeof(unsigned char) * (wordSize + 1));
-	word[wordSize] = '\0';
 }
 
 /*
@@ -337,11 +341,10 @@ void getWord()
 */
 void getLetter()
 {
-	fflush(stdin);
 	letter = getchar();
 	if (letter == '\n')
 	{
-		letter = getchar();
+		getLetter();
 	}
 }
 
