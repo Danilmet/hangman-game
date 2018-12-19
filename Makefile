@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror
+CFLAGS = -std=c99 -Wall -Werror
 TESTFLAGS = -I src -I thirdparty -Wall -Werror
 
 EXECUTABLE = bin/hangman
