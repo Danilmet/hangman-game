@@ -1,4 +1,4 @@
-CC = g++
+CC = gcc
 CFLAGS = -Wall -Werror
 TESTFLAGS = -I src -I thirdparty -Wall -Werror
 
@@ -12,15 +12,15 @@ BUILDDIR = build
 all: $(DIRECTORY)/main.o $(DIRECTORY)/hangman.o
 	$(CC) $(DIRECTORY)/main.o $(DIRECTORY)/hangman.o -o $(EXECUTABLE)
 
-$(DIRECTORY)/main.o: src/main.cpp
+$(DIRECTORY)/main.o: src/main.c
 	mkdir -p build
 	mkdir -p build/src
 	mkdir -p build/test
 	mkdir -p bin
-	$(CC) $(CFLAGS) -c src/main.cpp -o $(DIRECTORY)/main.o
+	$(CC) $(CFLAGS) -c src/main.c -o $(DIRECTORY)/main.o
 
-$(DIRECTORY)/hangman.o: src/hangman.cpp
-	$(CC) $(CFLAGS) -c src/hangman.cpp -o $(DIRECTORY)/hangman.o
+$(DIRECTORY)/hangman.o: src/hangman.c
+	$(CC) $(CFLAGS) -c src/hangman.c -o $(DIRECTORY)/hangman.o
 
 all: HANGMAN_TEST
 

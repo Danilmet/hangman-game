@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
-#include <iostream>
 #include <locale.h>
 
 #define clear() printf("\033[H\033[J")
@@ -23,5 +22,5 @@ void getWord();
 void getLetter();
 void printGuessedWord();
 
-
-
+void setLetter(unsigned char );
+void setWord(int, unsigned char *);
