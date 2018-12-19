@@ -90,6 +90,7 @@ int gallows()
 	}
 	clear();
 	printf("%s", header);
+	printGuessedWord();
 	if (gameStatus == 2)
 	{
 		printf("\t\t\t\t\tВы выиграли!\n");
@@ -393,4 +394,17 @@ void printGuessedWord()
 		printf("\t\t\t ═════\n\t\t\t ║   ║\n\t\t\t ║   ☻\n\t\t\t ║  /║\\\n\t\t\t ║   ║\n\t\t\t ║  / \\\n\t\t\t ║\n\t\t\t═╩═");
 	}
 	printf("\n\n\t\t\t\t%s\n", guessedWord);
+}
+
+void setLetter(unsigned char symbol)
+{
+	letter = symbol;
+}
+
+
+void setWord(int size, unsigned char *string)
+{
+	word = (unsigned char *)malloc(sizeof(unsigned char) * (size + 1));
+	word = string;
+	wordSize = size;
 }
